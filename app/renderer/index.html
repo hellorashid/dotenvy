@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My App</title>
+  </head>
+  <body style="margin: 0">
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+
+
+
+    <script>
+      console.log(process.env)
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: "dotenvy-app.firebaseapp.com",
+        databaseURL: "https://dotenvy-app.firebaseio.com",
+        projectId: "dotenvy-app",
+        storageBucket: "dotenvy-app.appspot.com",
+        messagingSenderId: "245336078230",
+        appId: process.env.FIREBASE_APP_ID
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+        
+    <div id="app"></div>
+    <script src="./app.js" data-container="#app"></script>
+    <script>
+      if (process.env.BROWSER_SYNC_CLIENT_URL) {
+        const current = document.currentScript;
+        const script = document.createElement('script');
+        script.src = process.env.BROWSER_SYNC_CLIENT_URL;
+        script.async = true;
+        current.parentNode.insertBefore(script, current);
+      }
+    </script>
+
+  </body>
+</html>
