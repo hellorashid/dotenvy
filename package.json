@@ -17,6 +17,7 @@
     "firebase": "^7.7.0",
     "frameless-titlebar": "^1.0.5",
     "grommet": "^2.11.2",
+    "grommet-icons": "^4.4.0",
     "history": "^4.6.3",
     "polished": "^3.5.1",
     "prop-types": "^15.5.10",
