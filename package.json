@@ -16,7 +16,9 @@
     "electron-store": "^5.1.1",
     "firebase": "^7.7.0",
     "frameless-titlebar": "^1.0.5",
+    "grommet": "^2.11.2",
     "history": "^4.6.3",
+    "polished": "^3.5.1",
     "prop-types": "^15.5.10",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -29,7 +31,8 @@
     "redux-thunk": "^2.2.0",
     "shelljs": "^0.8.3",
     "simplebar": "^5.1.0",
-    "simplebar-react": "^2.1.0"
+    "simplebar-react": "^2.1.0",
+    "styled-components": "^5.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

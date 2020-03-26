@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
 import ProjectsView from './ProjectsView.js'
-
 import SimpleBar from 'simplebar-react';
+import { Box, Grommet, Heading, Button } from 'grommet';
+
 
 const Store = require('electron-store');
 const store = new Store();
@@ -137,7 +138,7 @@ class AppView extends React.Component {
   return ( 
     <div>
       <div style={{position: 'absolute', left: 10, color: '#efefef'}}>
-        <h3>Projects</h3>
+        <Heading level='3'>Projects</Heading>
         { !loading && 
           <React.Fragment>
             { projects.length == 0 && 
@@ -145,15 +146,28 @@ class AppView extends React.Component {
             }
           </React.Fragment>
         }
+
+        <Button
+          // icon={<Icons.Edit />}
+          size="small"
+          label="New"
+          onClick={() => {}}
+        />
+
       </div>
     
-      <div style={{
-          padding: 10, backgroundColor: '#173140', width: '80%',
+      <Box 
+        // background='dark-1'
+        elevation='xlarge'
+        animation='fadeIn'
+        style={{
+          padding: 10,
+          backgroundColor: '#173140',
+          width: '80%',
           display: 'flex', flexDirection: 'column', alignItems: 'center', 
           overflowY: 'scroll', 
           position: 'absolute', right: 0, height: '80%', 
           borderTopLeftRadius: 20, borderBottomLeftRadius: 20, 
-          
         }}>
 
         {/*
@@ -161,7 +175,7 @@ class AppView extends React.Component {
           <ProjectsView user={this.state.currentUser} uid={this.state.currentUid}/>
         } 
         */}
-      </div>
+      </Box>
     </div>
   )} 
 } 
