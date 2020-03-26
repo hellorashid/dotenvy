@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
-import ProjectsView from './ProjectsView.js'
+import SingleProject from './SingleProject.js'
 import SimpleBar from 'simplebar-react';
-import { Box, Grommet, Heading, Button } from 'grommet';
-
+import { Box, Grommet, Heading, Button, TextInput, Layer, List} from 'grommet';
+import { Add, Logout} from 'grommet-icons';
 
 const Store = require('electron-store');
 const store = new Store();
@@ -96,9 +96,9 @@ export default class LoggedIn extends Component {
       <div style={{backgroundColor: '#001D2D', height: '100vh', margin: 0, overflow: 'hidden'}} >
       <TitleBar app="dotEnvy Beta" icon='../../dist-assets/icon.png'/>
         
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 10}}> 
-        <img onClick={this.handleLogout} src="https://img.icons8.com/ios-filled/24/000000/logout-rounded-left.png" style={{width: 30, height: 30}}></img>
-        <img src={'https://api.adorable.io/avatars/400/69b794e37ce183bb7018e105e937749b.png'} style={{width: 40, height: 40, borderRadius: 25, marginLeft: 10}}/>
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 10, marginBottom: 15}}> 
+        <Logout onClick={this.handleLogout}/>
+        {/* <img src={'https://api.adorable.io/avatars/400/sssdsd.png'} style={{width: 40, height: 40, borderRadius: 25, marginLeft: 10}}/> */}
       </div>
 
       <AppView />
@@ -113,7 +113,10 @@ class AppView extends React.Component {
     super(props)
     this.state = { 
       projects : [], 
-      loading: true
+      loading: true, 
+      newProjectName: '', 
+      showNewModal: false, 
+      currentProject: undefined
     }
   }
 
@@ -131,28 +134,50 @@ class AppView extends React.Component {
     }
   }
 
- 
+  createNewProject = () => { 
+    let newProject = { 
+      name: this.state.newProjectName, 
+      filePath: '', 
+      variables: [], 
+    }
+    this.setState(state => {
+      const projects = state.projects.concat(newProject)
+      return {
+        projects,
+        newProjectName: '',
+        showNewModal: false
+      };
+    });
+  }
+
+  selectProject = (currentProject) => { 
+    this.setState({currentProject: currentProject})
+  }
+
+  handleProjectNameChange = (e) => { 
+    this.setState({newProjectName: e.target.value})
+  }
+
+  toggleNewModal = () => { 
+    this.setState({showNewModal: !this.state.showNewModal})
+  }
 
   render() { 
   const {projects, loading} = this.state
   return ( 
     <div>
       <div style={{position: 'absolute', left: 10, color: '#efefef'}}>
-        <Heading level='3'>Projects</Heading>
+        <Heading level='3'>Projects   <Add onClick={this.toggleNewModal} color='brand'/></Heading>
+
         { !loading && 
           <React.Fragment>
-            { projects.length == 0 && 
-                <div> No Projects...</div> 
+            { projects.length == 0 ? 
+              <div> No Projects...</div> 
+              : 
+              <ProjectsList projects={projects} selectProject={this.selectProject}/>
             }
           </React.Fragment>
         }
-
-        <Button
-          // icon={<Icons.Edit />}
-          size="small"
-          label="New"
-          onClick={() => {}}
-        />
 
       </div>
     
@@ -170,16 +195,61 @@ class AppView extends React.Component {
           borderTopLeftRadius: 20, borderBottomLeftRadius: 20, 
         }}>
 
-        {/*
-        { this.state.currentUid != undefined && 
-          <ProjectsView user={this.state.currentUser} uid={this.state.currentUid}/>
+        {
+          this.state.showNewModal && 
+          <Layer
+            onEsc={this.toggleNewModal}
+            onClickOutside={this.toggleNewModal}
+          >
+            <Box pad="large">
+            <TextInput
+              placeholder="Project Name"
+              value={this.state.newProjectName}
+              onChange={this.handleProjectNameChange}
+              />
+             <Button  
+                // padding
+                size="small"
+                label="Create Project"
+                onClick={this.createNewProject}
+              /> 
+            </Box>
+          </Layer>
+        }
+
+        
+        { this.state.currentProject != undefined && 
+          <SingleProject project={this.state.currentProject} updateProject={()=>console.log('hi')}/>
         } 
-        */}
+       
+
+
       </Box>
     </div>
   )} 
 } 
 
+
+const ProjectsList = ({projects, selectProject}) => { 
+  return(
+    <Box>
+      {
+        projects.map(proj => { 
+          return (
+            <Box 
+              key={proj.name}
+              focusIndicator={true}
+              onClick={()=>selectProject(proj)}
+              hoverIndicator={true}
+            >
+              {proj.name}
+            </Box>)
+          
+        })
+      }
+    </Box>
+  )
+}
 
 
 
