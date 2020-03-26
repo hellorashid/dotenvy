@@ -6,8 +6,7 @@ import dotenv from 'dotenv'
 
 var app = require('electron').remote; 
 var dialog = app.dialog;
-var fs = require('fs'); // Load the File System to execute our common tasks (CRUD)
-
+var fs = require('fs'); 
 
 
 export default class ProjectsView extends Component {
@@ -26,12 +25,15 @@ export default class ProjectsView extends Component {
   }
 
   componentDidMount = () => { 
-    const projId = this.props.user.projects
     console.log('whhat', this.props.user)
-    // this.getProjects(projId)
   }
-
- 
+  
+  componentDidUpdate(prevProps) {
+    if (this.props.user.projects !== prevProps.user.projects) {
+      console.log('Updated Projects..')
+      this.getAllProjects(this.props.user.projects)
+    }
+  }
 
   createProject = async () => { 
     const {uid} = this.props
@@ -54,14 +56,6 @@ export default class ProjectsView extends Component {
       projects: firebase.firestore.FieldValue.arrayUnion(projectId)
     })
   }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.user.projects !== prevProps.user.projects) {
-      console.log('Updated Projects..')
-      this.getAllProjects(this.props.user.projects)
-    }
-  }
-   
 
     // if (this.state.folder != '') { 
     //   let fileName = this.state.folder[0] + "\\.env"
@@ -94,7 +88,6 @@ export default class ProjectsView extends Component {
 
   getAllProjects = async (projectsArray) => { 
     let projects = []
-
     Promise.all(
       projectsArray.map(async proj => { 
         return await this.getProject(proj)
@@ -111,6 +104,7 @@ export default class ProjectsView extends Component {
       })
   }
 
+ 
   render() {
 
     return (

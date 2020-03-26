@@ -13,6 +13,7 @@
     "@babel/register": "^7.0.0",
     "connected-react-router": "^6.8.0",
     "dotenv": "^8.2.0",
+    "electron-store": "^5.1.1",
     "firebase": "^7.7.0",
     "frameless-titlebar": "^1.0.5",
     "history": "^4.6.3",

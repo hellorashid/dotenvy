@@ -5,6 +5,10 @@ import ProjectsView from './ProjectsView.js'
 
 import SimpleBar from 'simplebar-react';
 
+const Store = require('electron-store');
+const store = new Store();
+
+
 // import 'simplebar/dist/simplebar.min.css';
 
 export default class LoggedIn extends Component {
@@ -89,22 +93,60 @@ export default class LoggedIn extends Component {
   render() {
     return (
       <div style={{backgroundColor: '#001D2D', height: '100vh', margin: 0, overflow: 'hidden'}} >
-      <TitleBar app="Dotenvy Beta" icon='../../dist-assets/icon.png'/>
+      <TitleBar app="dotEnvy Beta" icon='../../dist-assets/icon.png'/>
         
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 10}}> 
-        {/* <button onClick={this.handleLogout}></button> */}
         <img onClick={this.handleLogout} src="https://img.icons8.com/ios-filled/24/000000/logout-rounded-left.png" style={{width: 30, height: 30}}></img>
         <img src={'https://api.adorable.io/avatars/400/69b794e37ce183bb7018e105e937749b.png'} style={{width: 40, height: 40, borderRadius: 25, marginLeft: 10}}/>
-
-        {/* { this.state.currentUser != {} && 
-          <h3>{this.state.currentUser.email}</h3>
-        } */}
       </div>
 
-      <div style={{position: 'absolute', left: 0}}>
+      <AppView />
+
+      </div>
+    );
+  };
+}
+
+class AppView extends React.Component {
+  constructor(props) { 
+    super(props)
+    this.state = { 
+      projects : [], 
+      loading: true
+    }
+  }
+
+  componentDidMount = () => { 
+    this.getProjects()
+  }
+
+  getProjects = () => { 
+    console.log('projects')
+    let projects = store.get('projects')
+    if (projects) { 
+      this.setState({projects, loading: false})
+    } else { 
+      this.setState({loading: false})
+    }
+  }
+
+ 
+
+  render() { 
+  const {projects, loading} = this.state
+  return ( 
+    <div>
+      <div style={{position: 'absolute', left: 10, color: '#efefef'}}>
         <h3>Projects</h3>
+        { !loading && 
+          <React.Fragment>
+            { projects.length == 0 && 
+                <div> No Projects...</div> 
+            }
+          </React.Fragment>
+        }
       </div>
-      
+    
       <div style={{
           padding: 10, backgroundColor: '#173140', width: '80%',
           display: 'flex', flexDirection: 'column', alignItems: 'center', 
@@ -114,15 +156,16 @@ export default class LoggedIn extends Component {
           
         }}>
 
+        {/*
         { this.state.currentUid != undefined && 
           <ProjectsView user={this.state.currentUser} uid={this.state.currentUid}/>
-        }
+        } 
+        */}
       </div>
+    </div>
+  )} 
+} 
 
-      </div>
-    );
-  };
-}
 
 
 
