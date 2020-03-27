@@ -189,7 +189,7 @@ class AppView extends React.Component {
           padding: 10,
           backgroundColor: '#173140',
           width: '80%',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', 
+          display: 'flex', flexDirection: 'column', alignItems: 'left', 
           overflowY: 'scroll', 
           position: 'absolute', right: 0, height: '80%', 
           borderTopLeftRadius: 20, borderBottomLeftRadius: 20, 
@@ -217,13 +217,10 @@ class AppView extends React.Component {
           </Layer>
         }
 
-        
         { this.state.currentProject != undefined && 
           <SingleProject project={this.state.currentProject} updateProject={()=>console.log('hi')}/>
         } 
        
-
-
       </Box>
     </div>
   )} 
