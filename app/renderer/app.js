@@ -34,7 +34,12 @@ const theme = {
         medium: '0px 2px 4px -1px rgba(7, 190, 184, 0.1), 0px 4px 5px 0px rgba(7, 190, 184, 0.14), 0px 1px 10px 0px rgba(7, 190, 184, 0.12)',
       },
     }
+  }, 
+  layer : { 
+    background: '#173140'
   }
+
+
 }
 
 ReactDOM.render(

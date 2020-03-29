@@ -200,6 +200,7 @@ class AppView extends React.Component {
           <Layer
             onEsc={this.toggleNewModal}
             onClickOutside={this.toggleNewModal}
+            backgroundColor=""
           >
             <Box pad="large">
             <TextInput
@@ -208,7 +209,7 @@ class AppView extends React.Component {
               onChange={this.handleProjectNameChange}
               />
              <Button  
-                // padding
+                margin="small"
                 size="small"
                 label="Create Project"
                 onClick={this.createNewProject}
@@ -238,6 +239,7 @@ const ProjectsList = ({projects, selectProject}) => {
               focusIndicator={true}
               onClick={()=>selectProject(proj)}
               hoverIndicator={true}
+              pad="small"
             >
               {proj.name}
             </Box>)
