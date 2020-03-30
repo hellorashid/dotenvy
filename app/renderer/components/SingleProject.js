@@ -10,22 +10,31 @@ const { dialog } = require('electron').remote
 var fs = require('fs'); 
 
 
-const SingleProject = ({project, updateProjects}) => { 
+const SingleProject = ({project, updateProject}) => { 
   const [key, setKey] = React.useState('')
   const [value, setValue] = React.useState('')
   const [folder, setFolder] = React.useState('')
   const [test, setTest] = React.useState('')
 
   const openFolder = () => { 
-    
     const f = dialog.showOpenDialogSync({
       title:"Select Project Directory",
       properties: ["openDirectory"]
     })
 
-    console.log('done', f)
+    if (f != undefined) { 
+      saveFolder(f[0])
+    } else { 
+      console.log('No Folder Selected')
+    }
       // shell.cd(folderPaths[0])
       // setTest(shell.ls().length)
+  }
+
+  const saveFolder = (folder) => { 
+    let proj = {...project}
+    proj.filePath = folder
+    updateProject(proj)
   }
 
   const saveEnvFile = () => {
@@ -70,7 +79,7 @@ const SingleProject = ({project, updateProjects}) => {
   }
 
   return(
-  <Box style={{color: 'white', padding: 10, margin: 20}} animation="fadeIn">
+  <Box style={{color: 'white', padding: 10, margin: 20}} animation="fadeIn" animation="fadeIn">
     <Heading margin="small">{project.name}</Heading>
     <FolderPathView openFolder={openFolder} folder={folder}/>
    
@@ -83,10 +92,10 @@ const SingleProject = ({project, updateProjects}) => {
            </div>)
       })
     }
-    
+{/*     
   <input onChange={(e)=>setKey(e.target.value)} type="text" value={key} placeholder="key"/>
   <input onChange={(e)=>setValue(e.target.value)} type="text" value={value} placeholder="value"/>
-  <button onClick={createVariable}>New Variable</button>
+  <button onClick={createVariable}>New Variable</button> */}
 
 
   </Box>)

@@ -219,7 +219,7 @@ class AppView extends React.Component {
         }
 
         { this.state.currentProject != undefined && 
-          <SingleProject project={this.state.currentProject} updateProject={()=>console.log('hi')}/>
+          <SingleProject project={this.state.currentProject} updateProject={(proj)=>console.log('hi', proj)}/>
         } 
        
       </Box>
