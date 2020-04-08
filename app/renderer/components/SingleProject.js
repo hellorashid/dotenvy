@@ -34,7 +34,8 @@ const SingleProject = ({project, updateProject}) => {
   const saveFolder = (folder) => { 
     let proj = {...project}
     proj.filePath = folder
-    updateProject(proj)
+    console.log(proj)
+    // updateProject(proj)
   }
 
   const saveEnvFile = () => {
@@ -81,8 +82,8 @@ const SingleProject = ({project, updateProject}) => {
   return(
   <Box style={{color: 'white', padding: 10, margin: 20}} animation="fadeIn" animation="fadeIn">
     <Heading margin="small">{project.name}</Heading>
-    <FolderPathView openFolder={openFolder} folder={folder}/>
-   
+    <FolderPathView openFolder={openFolder} folder={folder} updateFolder={setFolder}/>
+    <button onClick={()=>console.log(folder)}>TEST</button>
 
     <h2>Env Variables</h2>
     {

@@ -125,26 +125,31 @@ class AppView extends React.Component {
   }
 
   getProjects = () => { 
-    console.log('projects')
     let projects = store.get('projects')
+    console.log(projects)
     if (projects) { 
-      this.setState({projects, loading: false})
+      let projArray = Object.values(projects)
+      this.setState({projects: projArray, loading: false})
     } else { 
       this.setState({loading: false})
     }
   }
 
-  saveProjects = (projects) => { 
-    store.set('projects', projects)
+  saveProjects = (proj) => { 
+    if (typeof proj == 'object') { 
+      store.set(`projects.${proj.id}`, proj)
+      console.log('Updating project', proj)
+    } 
   }
 
   createNewProject = () => { 
+    let id = GenerateProjectId(this.state.newProjectName)
     let newProject = { 
+      id: id,
       name: this.state.newProjectName, 
       filePath: '', 
       variables: [], 
     }
-    const projects = this.state.projects.concat(newProject)
     this.setState(state => {
       const projects = state.projects.concat(newProject)
       return {
@@ -152,9 +157,8 @@ class AppView extends React.Component {
         newProjectName: '',
         showNewModal: false
       };
-    }, () => { 
     });
-    this.saveProjects(projects)
+    this.saveProjects(newProject)
   }
 
   selectProject = (currentProject) => { 
@@ -169,11 +173,26 @@ class AppView extends React.Component {
     this.setState({showNewModal: !this.state.showNewModal})
   }
 
+  _updateProjects = () => { 
+    // Debug Function -> Use to update ALL projects
+    let projects = {}
+    console.log(this.state.projects)
+    this.state.projects.map( p => { 
+      let id = GenerateProjectId(p.name)
+      projects[id] = { 
+        ...p, 
+        id: id
+      }
+    })
+    // console.log(projects)
+  }
+
   render() { 
   const {projects, loading} = this.state
   return ( 
     <div>
       <div style={{position: 'absolute', left: 10, color: '#efefef'}}>
+        {/* <button onClick={this._updateProjects}>DEBUG</button> */}
         <Heading level='3'>Projects   <Add onClick={this.toggleNewModal} color='brand'/></Heading>
 
         { !loading && 
@@ -233,6 +252,12 @@ class AppView extends React.Component {
     </div>
   )} 
 } 
+
+const GenerateProjectId = (string) => { 
+  let res = string.replace(/\W/g, '')
+  res = res.toLowerCase()
+  return res
+}
 
 
 const ProjectsList = ({projects, selectProject}) => { 
