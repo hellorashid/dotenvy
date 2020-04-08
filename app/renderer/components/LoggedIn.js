@@ -126,7 +126,7 @@ class AppView extends React.Component {
 
   getProjects = () => { 
     let projects = store.get('projects')
-    console.log(projects)
+    console.log('Got projects:',projects)
     if (projects) { 
       let projArray = Object.values(projects)
       this.setState({projects: projArray, loading: false})
@@ -135,11 +135,18 @@ class AppView extends React.Component {
     }
   }
 
+  updateProject = (proj) => {
+    // Update state & write to disk seperately? 
+  }
+
   saveProjects = (proj) => { 
     if (typeof proj == 'object') { 
-      store.set(`projects.${proj.id}`, proj)
       console.log('Updating project', proj)
-    } 
+      store.set(`projects.${proj.id}`, proj)
+      this.getProjects()
+    } else {
+      console.log("Error writing proj to disk!")
+    }
   }
 
   createNewProject = () => { 
@@ -173,7 +180,7 @@ class AppView extends React.Component {
     this.setState({showNewModal: !this.state.showNewModal})
   }
 
-  _updateProjects = () => { 
+  _debug_updateProjects = () => { 
     // Debug Function -> Use to update ALL projects
     let projects = {}
     console.log(this.state.projects)
@@ -191,16 +198,20 @@ class AppView extends React.Component {
   const {projects, loading} = this.state
   return ( 
     <div>
-      <div style={{position: 'absolute', left: 10, color: '#efefef'}}>
+      <div style={{position: 'absolute', left: 0, color: '#efefef'}}>
         {/* <button onClick={this._updateProjects}>DEBUG</button> */}
-        <Heading level='3'>Projects   <Add onClick={this.toggleNewModal} color='brand'/></Heading>
+        <Heading level='3' style={{marginLeft: 10}}>Projects <Add onClick={this.toggleNewModal} color='brand'/></Heading>
 
         { !loading && 
           <React.Fragment>
             { projects.length == 0 ? 
               <div> No Projects...</div> 
               : 
-              <ProjectsList projects={projects} selectProject={this.selectProject}/>
+              <ProjectsList 
+                projects={projects} 
+                selectProject={this.selectProject} 
+                currentProject={this.state.currentProject}
+              />
             }
           </React.Fragment>
         }
@@ -245,7 +256,10 @@ class AppView extends React.Component {
         }
 
         { this.state.currentProject != undefined && 
-          <SingleProject project={this.state.currentProject} updateProject={(proj)=>console.log('hi', proj)}/>
+          <SingleProject 
+            project={this.state.projects[this.state.currentProject]}
+            updateProject={this.saveProjects}
+          />
         } 
        
       </Box>
@@ -260,18 +274,22 @@ const GenerateProjectId = (string) => {
 }
 
 
-const ProjectsList = ({projects, selectProject}) => { 
+const ProjectsList = ({projects, selectProject, currentProject}) => { 
   return(
     <Box>
       {
-        projects.map(proj => { 
+        projects.map( (proj, index) => { 
+          const isActive = currentProject == index ? true: false;
           return (
             <Box 
-              key={proj.name}
-              focusIndicator={true}
-              onClick={()=>selectProject(proj)}
+              key={proj.id}
+              focusIndicator={false}
+              onClick={()=>selectProject(index)}
               hoverIndicator={true}
               pad="small"
+              background={isActive == true ? "#173140": ''}
+              elevation={isActive == true ? "large": ''}
+              round={{"size": "small", "corner": "right"}}
             >
               {proj.name}
             </Box>)

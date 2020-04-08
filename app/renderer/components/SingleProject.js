@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
 import shell from 'shelljs'
-import { Box, Grommet, Heading, Button, Text, Layer, List} from 'grommet';
+import { Box, Grommet, Heading, Button, Text, TextInput, Grid} from 'grommet';
 
 import dotenv from 'dotenv'
 
@@ -35,7 +35,7 @@ const SingleProject = ({project, updateProject}) => {
     let proj = {...project}
     proj.filePath = folder
     console.log(proj)
-    // updateProject(proj)
+    updateProject(proj)
   }
 
   const saveEnvFile = () => {
@@ -57,14 +57,18 @@ const SingleProject = ({project, updateProject}) => {
     }
   }
 
-  const createVariable = () => { 
-    firebase.firestore().collection('projects').doc(project.id).update({
-      variables: firebase.firestore.FieldValue.arrayUnion({key: key, value: value})
-    })
-    setKey('')
-    setValue('')
+  const createVariable = (key, value) => {
+    let proj = { ... project}
+    proj.variables.push({key, value})
+    updateProject(proj)
+
+    // firebase.firestore().collection('projects').doc(project.id).update({
+    //   variables: firebase.firestore.FieldValue.arrayUnion({key: key, value: value})
+    // })
+    // setKey('')
+    // setValue('')
     // updateProjects()
-    console.log(project.id)
+    // console.log(project.id)
   }
 
   const testFunc = () => { 
@@ -82,8 +86,8 @@ const SingleProject = ({project, updateProject}) => {
   return(
   <Box style={{color: 'white', padding: 10, margin: 20}} animation="fadeIn" animation="fadeIn">
     <Heading margin="small">{project.name}</Heading>
-    <FolderPathView openFolder={openFolder} folder={folder} updateFolder={setFolder}/>
-    <button onClick={()=>console.log(folder)}>TEST</button>
+    <FolderPathView openFolder={openFolder} folder={project.filePath}/>
+    {/* <button onClick={()=>console.log(folder)}>TEST</button> */}
 
     <h2>Env Variables</h2>
     {
@@ -93,18 +97,50 @@ const SingleProject = ({project, updateProject}) => {
            </div>)
       })
     }
-{/*     
-  <input onChange={(e)=>setKey(e.target.value)} type="text" value={key} placeholder="key"/>
-  <input onChange={(e)=>setValue(e.target.value)} type="text" value={value} placeholder="value"/>
-  <button onClick={createVariable}>New Variable</button> */}
 
+    <NewVariable createVariable={createVariable}/>
 
   </Box>)
 
 }
 
+const NewVariable = ({createVariable}) => { 
+  const [key, setKey] = React.useState('')
+  const [value, setValue] = React.useState('')
+  const submit = () => { 
+    if (key != '' && value != '') { 
+      createVariable(key, value)
+      setKey('')
+      setValue('')
+    } else { 
+      console.log('Key or Value cannot be empty')
+    }
+  }
+  return(
+    <Box>
+      <Grid
+        columns={['1/4', '1/2', '1/4']}
+      >
+      <TextInput
+        placeholder="Key"
+        value={key}
+        onChange={event => setKey(event.target.value)}
+        />
+      <TextInput
+        placeholder="Value"
+        value={value}
+        onChange={event => setValue(event.target.value)}
+        />
+      <Button color="light" style={{color: 'white'}} label="Create" 
+        onClick={submit}
+        round={false}
+      />
+      </Grid>
+    </Box>
+  )
+}
+
 const FolderPathView = ({folder, openFolder, saveEnvFile}) => { 
-  folder = 'User/Desktop/Codebook/shpaces'
   return(
     <Box background="dark-3" elevation="small" round="xsmall" pad={{left: "xsmall"}}
       onClick={openFolder}

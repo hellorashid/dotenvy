@@ -24,7 +24,7 @@ const rootElement = document.querySelector(document.currentScript.getAttribute('
 const theme = {
   global: {
     font: {
-      family: 'Roboto',
+      family: 'Roboto-Mono, monospace',
       size: '14px',
       height: '20px',
       color: '#efefef'
@@ -33,7 +33,8 @@ const theme = {
       light: {
         medium: '0px 2px 4px -1px rgba(7, 190, 184, 0.1), 0px 4px 5px 0px rgba(7, 190, 184, 0.14), 0px 1px 10px 0px rgba(7, 190, 184, 0.12)',
       },
-    }
+    }, 
+   
   }, 
   layer : { 
     background: '#173140'
