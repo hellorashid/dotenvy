@@ -134,12 +134,17 @@ class AppView extends React.Component {
     }
   }
 
+  saveProjects = (projects) => { 
+    store.set('projects', projects)
+  }
+
   createNewProject = () => { 
     let newProject = { 
       name: this.state.newProjectName, 
       filePath: '', 
       variables: [], 
     }
+    const projects = this.state.projects.concat(newProject)
     this.setState(state => {
       const projects = state.projects.concat(newProject)
       return {
@@ -147,7 +152,9 @@ class AppView extends React.Component {
         newProjectName: '',
         showNewModal: false
       };
+    }, () => { 
     });
+    this.saveProjects(projects)
   }
 
   selectProject = (currentProject) => { 
