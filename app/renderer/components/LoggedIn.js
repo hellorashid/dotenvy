@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
 import SingleProject from './SingleProject.js'
-import SimpleBar from 'simplebar-react';
 import { Box, Grommet, Heading, Button, TextInput, Layer, List} from 'grommet';
 import { Add, Logout} from 'grommet-icons';
 
 const Store = require('electron-store');
 const store = new Store();
 
-
-// import 'simplebar/dist/simplebar.min.css';
+import { remote } from 'electron';
+const currentWindow = remote.getCurrentWindow();
 
 export default class LoggedIn extends Component {
   static propTypes = {
@@ -99,7 +98,14 @@ export default class LoggedIn extends Component {
   render() {
     return (
       <div style={{backgroundColor: '#001D2D', height: '100vh', margin: 0, overflow: 'hidden'}} >
-      <TitleBar title="dotEnvy - βeta" icon='../../dist-assets/icon.png' platform={process.platform} />
+      <TitleBar title="dotEnvy - βeta" icon='../../dist-assets/icon.png' 
+          currentWindow={currentWindow} // electron window instance
+          platform={process.platform}
+         onClose={() => currentWindow.close()}
+         onMinimize={() => currentWindow.minimize()}
+         onMaximize={() => currentWindow.maximize()}
+         onDoubleClick={() => currentWindow.maximize()}
+      />
         
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 10, marginBottom: 15}}> 
         <Logout onClick={this.handleLogout}/>
