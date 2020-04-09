@@ -99,7 +99,7 @@ export default class LoggedIn extends Component {
   render() {
     return (
       <div style={{backgroundColor: '#001D2D', height: '100vh', margin: 0, overflow: 'hidden'}} >
-      <TitleBar app="dotEnvy Beta" icon='../../dist-assets/icon.png'/>
+      {/* <TitleBar app="dotEnvy Beta" icon='../../dist-assets/icon.png'/> */}
         
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 10, marginBottom: 15}}> 
         <Logout onClick={this.handleLogout}/>

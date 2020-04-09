@@ -22,8 +22,8 @@ const installExtensions = async () => {
 };
 
 crashReporter.start({
-  productName: 'YourName',
-  companyName: 'YourCompany',
+  productName: 'DotEnvy',
+  companyName: 'DotEnvy',
   submitURL: 'https://your-domain.com/url-to-submit',
   uploadToServer: false,
 });
@@ -47,7 +47,7 @@ app.on('ready', async () => {
     minWidth: 640,
     minHeight: 480,
     show: false,
-    frame: false, 
+    frame: true, 
     webPreferences: {
       nodeIntegration: true
     }
