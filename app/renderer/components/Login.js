@@ -68,7 +68,7 @@ export default class Login extends Component {
   render() {
     return (
       <div style={{backgroundColor: '#001D2D', height: '100vh', margin: 0}} >
-        {/* <TitleBar app="dotEnvy - Beta"  icon='../../dist-assets/icon.png' /> */}
+      <TitleBar title="dotEnvy Beta" icon='../../dist-assets/icon.png' platform={process.platform} />
 
         <div style={{
           padding: 10, backgroundColor: '#173140', margin: 0, 
