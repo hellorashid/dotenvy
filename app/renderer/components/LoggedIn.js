@@ -27,13 +27,13 @@ export default class LoggedIn extends Component {
   }
 
   componentDidMount = () => { 
-    firebase.auth().onAuthStateChanged(user => { 
-      if (user) { 
-        console.log('Auth:', user)
-        this.setState({currentUid: user.uid})
-        this.setupUserSnapshot(user.uid, user.email)
-      }
-    });
+    // firebase.auth().onAuthStateChanged(user => { 
+    //   if (user) { 
+    //     console.log('Auth:', user)
+    //     this.setState({currentUid: user.uid})
+    //     this.setupUserSnapshot(user.uid, user.email)
+    //   }
+    // });
   }
 
   setupUserSnapshot = async (uid, email) => { 
@@ -49,46 +49,51 @@ export default class LoggedIn extends Component {
 
   createUserSnapshot = async (uid) => { 
     console.log('Creating Snapshot...')
-    return firebase.firestore().collection('users').doc(uid)
-    .onSnapshot((doc) => { 
-      console.log('Updated Snapshot ... ')
-      this.setState({
-        currentUser: doc.data()
-      })
-    })
+    // return firebase.firestore().collection('users').doc(uid)
+    // .onSnapshot((doc) => { 
+    //   console.log('Updated Snapshot ... ')
+    //   this.setState({
+    //     currentUser: doc.data()
+    //   })
+    // })
   }
 
   checkIfUserExists = async (uid) => { 
-    const docRef = firebase.firestore().collection('users').doc(uid)
-    return docRef.get()
-      .then(doc => doc.exists)
-      .catch( e => console.log('checkIfUserExists:', e))
+    // const docRef = firebase.firestore().collection('users').doc(uid)
+    // return docRef.get()
+    //   .then(doc => doc.exists)
+    //   .catch( e => console.log('checkIfUserExists:', e))
   } 
 
   createUser = async (uid, email) => {
-    return firebase.firestore().collection('users').doc(uid).set({
-      email: email, 
-      team: '', 
-      firstName: '', 
-      lastName: '', 
-      profileUrl: '', 
-      projects: []
-    }).then(()=>{ 
-      console.log('User profile created!')
-    }).catch (e => { 
-      console.log('Error creating user',e)
-    })
+    // return firebase.firestore().collection('users').doc(uid).set({
+    //   email: email, 
+    //   team: '', 
+    //   firstName: '', 
+    //   lastName: '', 
+    //   profileUrl: '', 
+    //   projects: []
+    // }).then(()=>{ 
+    //   console.log('User profile created!')
+    // }).catch (e => { 
+    //   console.log('Error creating user',e)
+    // })
   }
 
   handleLogout = () => {
-    firebase.auth().signOut().then(()=> {
-      this.props.onLogout({
-        username: '',
-        loggedIn: false,
-      })
-    }).catch(function(error) {
-      // An error happened.
-    });
+    // firebase.auth().signOut().then(()=> {
+    //   this.props.onLogout({
+    //     username: '',
+    //     loggedIn: false,
+    //   })
+    // }).catch(function(error) {
+    //   // An error happened.
+    // });
+
+    this.props.onLogout({
+      username: '',
+      loggedIn: false,
+    })
   }
 
   render() {
