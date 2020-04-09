@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
 import { Button, Box} from 'grommet';
 
+import { remote } from 'electron';
+const currentWindow = remote.getCurrentWindow();
 
 export default class Login extends Component {
   static propTypes = {
@@ -68,8 +70,14 @@ export default class Login extends Component {
   render() {
     return (
       <div style={{backgroundColor: '#001D2D', height: '100vh', margin: 0}} >
-      <TitleBar title="dotEnvy Beta" icon='../../dist-assets/icon.png' platform={process.platform} />
-
+      <TitleBar title="dotEnvy - βeta" icon='../../dist-assets/icon.png' 
+              currentWindow={currentWindow} // electron window instance
+              platform={process.platform}
+            onClose={() => currentWindow.close()}
+            onMinimize={() => currentWindow.minimize()}
+            onMaximize={() => currentWindow.maximize()}
+            onDoubleClick={() => currentWindow.maximize()}
+          />
         <div style={{
           padding: 10, backgroundColor: '#173140', margin: 0, 
           borderRadius: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', 
