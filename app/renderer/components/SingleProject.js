@@ -44,7 +44,7 @@ const SingleProject = ({project, updateProject}) => {
 
   const saveEnvFile = () => {
    if (project.filePath != '') { 
-      let fileName = project.filePath + "\\.env"
+      let fileName = project.filePath + "/.env"
   
       let contents = ''
       project.variables.map( v => {

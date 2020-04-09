@@ -80,13 +80,13 @@ export default class Login extends Component {
 
           <Button onClick={this.signInLocal} label="Use Locally" primary/>  
 
-          <p>Email</p>
+          {/* <p>Email</p>
           <TextInput onChange={this.handleChange} name="email" type="text" value={this.state.email} />
           <p>Password</p>
           <TextInput onChange={this.handleChange} name="password" type="text" value={this.state.password} />
 
           <p></p>
-          <Button onClick={this.handleLogin}>Log In</Button>
+          <Button onClick={this.handleLogin}>Log In</Button> */}
           </Box>
           {/* <Button onClick={this.handleCreateAccount}>Create Account</Button> */}
         </div>
