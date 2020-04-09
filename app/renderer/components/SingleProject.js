@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
-import shell from 'shelljs'
+// import shell from 'shelljs'
 import { Box, Grommet, Heading, Button, Text, TextInput, Grid} from 'grommet';
+const {shell} = require('electron') // deconstructing assignment
+import {FolderOpen} from 'grommet-icons'
+
 
 import dotenv from 'dotenv'
 
@@ -11,10 +14,7 @@ var fs = require('fs');
 
 
 const SingleProject = ({project, updateProject}) => { 
-  const [key, setKey] = React.useState('')
-  const [value, setValue] = React.useState('')
   const [folder, setFolder] = React.useState('')
-  const [test, setTest] = React.useState('')
 
   const openFolder = () => { 
     const f = dialog.showOpenDialogSync({
@@ -31,6 +31,10 @@ const SingleProject = ({project, updateProject}) => {
       // setTest(shell.ls().length)
   }
 
+  const showFolder = () => { 
+    let x = shell.openItem(project.filePath)
+  }
+
   const saveFolder = (folder) => { 
     let proj = {...project}
     proj.filePath = folder
@@ -39,8 +43,8 @@ const SingleProject = ({project, updateProject}) => {
   }
 
   const saveEnvFile = () => {
-   if (folder != '') { 
-      let fileName = folder + "\\.env"
+   if (project.filePath != '') { 
+      let fileName = project.filePath + "\\.env"
   
       let contents = ''
       project.variables.map( v => {
@@ -61,14 +65,6 @@ const SingleProject = ({project, updateProject}) => {
     let proj = { ... project}
     proj.variables.push({key, value})
     updateProject(proj)
-
-    // firebase.firestore().collection('projects').doc(project.id).update({
-    //   variables: firebase.firestore.FieldValue.arrayUnion({key: key, value: value})
-    // })
-    // setKey('')
-    // setValue('')
-    // updateProjects()
-    // console.log(project.id)
   }
 
   const testFunc = () => { 
@@ -86,7 +82,13 @@ const SingleProject = ({project, updateProject}) => {
   return(
   <Box style={{color: 'white', padding: 10, margin: 20}} animation="fadeIn" animation="fadeIn">
     <Heading margin="small">{project.name}</Heading>
+    <Grid align="center"
+      columns={['3/4', '1/4']}
+    >
     <FolderPathView openFolder={openFolder} folder={project.filePath}/>
+    <Button  label="" size="small" onClick={showFolder} icon={<FolderOpen />} />
+    </Grid>
+
     {/* <button onClick={()=>console.log(folder)}>TEST</button> */}
 
     <h2>Env Variables</h2>
@@ -100,8 +102,25 @@ const SingleProject = ({project, updateProject}) => {
 
     <NewVariable createVariable={createVariable}/>
 
+    <Box>
+      <SaveEnvFile saveEnvFile={saveEnvFile} />
+    </Box>
+
   </Box>)
 
+}
+
+const SaveEnvFile = ({saveEnvFile}) => { 
+  
+  return(<Box width="small" margin="small">
+      <Button 
+        size="small"
+        style={{color: 'white'}}
+        label="Save .Env File"
+        onClick={saveEnvFile}
+      />
+    </Box>
+  )
 }
 
 const NewVariable = ({createVariable}) => { 
@@ -145,11 +164,6 @@ const FolderPathView = ({folder, openFolder, saveEnvFile}) => {
     <Box background="dark-3" elevation="small" round="xsmall" pad={{left: "xsmall"}}
       onClick={openFolder}
     >
-    {/* { folder == '' ? 
-        <button onClick={openFolder}>Open Folder</button>
-        : 
-        <button onClick={saveEnvFile}>Save Env</button>
-      } */}
       <Text size="small" color="light-1" style={{fontFamily: 'monospace'}}>Project Directory: {folder}</Text>
     </Box>
   )
