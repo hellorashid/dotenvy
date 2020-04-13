@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
 // import shell from 'shelljs'
-import { Box, Grommet, Heading, Button, Text, TextInput, Grid} from 'grommet';
+import { Box, CheckBox, Heading, Button, Text, TextInput, Grid} from 'grommet';
 const {shell} = require('electron') // deconstructing assignment
 import {FolderOpen} from 'grommet-icons'
 import Peer from 'peerjs';
@@ -105,7 +105,7 @@ const SingleProject = ({project, updateProject}) => {
     </Box>
 
     <Box background="#2C4351" style={{height: '100%', marginLeft: 10}}>
-      <ShareProject  />
+      <ShareProject  project={project}/>
     </Box>
 
     </Grid>
@@ -113,22 +113,114 @@ const SingleProject = ({project, updateProject}) => {
 
 }
 
+const SharingContainer = (props) => { 
+  const [connections, setConnections] = useState([])
+
+  const addConnection = (c) => { 
+    const _conns = [...connections, c]
+    setConnections(_conns)
+  }
+
+  var peer = new Peer(props.projectUid); 
+  peer.on('connection', (conn) => {
+    conn.on('open', () => {
+      console.log('Connected', conn.peer, conn)
+      addConnection(conn.peer)
+      conn.send(JSON.stringify(props.variables));
+    });
+
+    conn.on('data', (data) => {
+      console.log('Recieved', data);
+    });
+
+    conn.on('disconnected', () => { 
+      console.log('Disconnected!')
+    })
+
+  });
+
+  return (
+    <Box> 
+      <p>Connections:</p>
+      {connections.map(c => { 
+        return(
+          <p key={c}>{c}</p>
+        )
+      })}
+
+    </Box>
+  )
+
+}
 
 const ShareProject = (props) => { 
   const projectUid = '12mjnc9280' 
-  const [importId, setImportId] = useState('') 
-  
+  const [sharing, setSharing] = useState(false)
+
   return(<Box margin="small" >
       <Heading level="5" margin="xsmall">Share</Heading>
       <p>Project ID:<span style={{fontWeight: 'bold'}}>{projectUid}</span></p>
-      
+      <CheckBox
+        checked={sharing}
+        label="Start Sharing?"
+        onChange={(event) => setSharing(event.target.checked)}
+      />
+
+      { sharing && 
+        <SharingContainer projectUid={projectUid} variables={props.project.variables}/>
+      }
+
       <Heading level="5">Import</Heading>
+      <ImportProject />
+
+    </Box>
+  )
+}
+
+const ImportPeer = ({importId}) => { 
+  const [data, setData] = useState([])
+  const [connection, setConnection] = useState('')
+  const peer2 = new Peer('myyidd123'); 
+  console.log('connecting to', importId)
+  peer2.on('open', function (id) {
+    console.log('ID: ' + peer2.id);
+
+    const conn2 = peer2.connect(importId, {reliable: true})
+    conn2.on('open', function () {
+      console.log("Connected to: " + conn2.peer);
+      setConnection(conn2.peer)
+    });
+    conn2.on('data', function (data) {
+      console.log(data)
+    });
+    conn2.on('close', function () {
+      console.log('close')
+    });
+  });
+
+  
+  return(<Box>
+    {connection == '' ? 
+      <p>Connecting..</p>
+      : <p>Connected to {connection}</p>
+    }
+  </Box>)
+}
+
+const ImportProject = (props) => { 
+  const [importId, setImportId] = useState('') 
+  const [connect, setConnect] = useState(false)
+ 
+  return(<Box  >
       <TextInput
         placeholder="Import ID"
         value={importId}
         onChange={event => setImportId(event.target.value)}
       />
-
+      <Button onClick={()=>setConnect(!connect)}>Import</Button>
+      {connect &&
+        <ImportPeer importId={importId}/>
+      }
     </Box>
   )
 }
