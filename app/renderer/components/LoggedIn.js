@@ -268,6 +268,7 @@ class AppView extends React.Component {
 
         { this.state.currentProject != undefined && 
           <SingleProject 
+            key={this.state.projects[this.state.currentProject].id}
             project={this.state.projects[this.state.currentProject]}
             updateProject={this.saveProjects}
           />
