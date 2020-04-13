@@ -67,6 +67,14 @@ const SingleProject = ({project, updateProject}) => {
     updateProject(proj)
   }
 
+  const addVariables = (vars) => { 
+    let proj = { ... project}
+    vars.map( v => { 
+      proj.variables.push({key: v.key, value: v.value})
+    })
+    updateProject(proj)
+  }
+
   const testFunc = () => { 
     console.log('run')
     console.log(shell.grep('dotenv', 'package.json'))
@@ -105,7 +113,10 @@ const SingleProject = ({project, updateProject}) => {
     </Box>
 
     <Box background="#2C4351" style={{height: '100%', marginLeft: 10}}>
-      <ShareProject  project={project}/>
+      <ShareProject  
+        project={project}
+        addVariables={addVariables}  
+      />
     </Box>
 
     </Grid>
@@ -130,7 +141,7 @@ const SharingContainer = (props) => {
     });
 
     conn.on('data', (data) => {
-      console.log('Recieved', data);
+      console.log('Recieved', JSON.parse(data));
     });
 
     conn.on('disconnected', () => { 
@@ -171,13 +182,13 @@ const ShareProject = (props) => {
       }
 
       <Heading level="5">Import</Heading>
-      <ImportProject />
+      <ImportProject addVariables={props.addVariables} />
 
     </Box>
   )
 }
 
-const ImportPeer = ({importId}) => { 
+const ImportPeer = ({importId, addVariables}) => { 
   const [data, setData] = useState([])
   const [connection, setConnection] = useState('')
   const peer2 = new Peer('myyidd123'); 
@@ -191,18 +202,34 @@ const ImportPeer = ({importId}) => {
       setConnection(conn2.peer)
     });
     conn2.on('data', function (data) {
-      console.log(data)
+      console.log('Recieved', JSON.parse(data))
+      setData(JSON.parse(data))
     });
     conn2.on('close', function () {
       console.log('close')
     });
   });
 
+  const addToProject = () => { 
+      addVariables(data)
+  }
   
   return(<Box>
     {connection == '' ? 
       <p>Connecting..</p>
       : <p>Connected to {connection}</p>
+    }
+
+    {data.length > 0 && 
+    <Box> 
+    <p>Recieved Variables:</p>
+    {data.map( d => { 
+        return(
+          <p key={d.key}>{d.key}:{d.value}</p>
+      )})
+    }
+    <Button onClick={addToProject}>Add to Project</Button>
+    </Box>
     }
   </Box>)
 }
@@ -219,7 +246,7 @@ const ImportProject = (props) => {
       />
       <Button onClick={()=>setConnect(!connect)}>Import</Button>
       {connect &&
-        <ImportPeer importId={importId}/>
+        <ImportPeer importId={importId} addVariables={props.addVariables}/>
       }
     </Box>
   )
