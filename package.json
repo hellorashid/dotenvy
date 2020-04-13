@@ -19,6 +19,7 @@
     "grommet": "^2.11.2",
     "grommet-icons": "^4.4.0",
     "history": "^4.6.3",
+    "peerjs": "^1.2.0",
     "polished": "^3.5.1",
     "prop-types": "^15.5.10",
     "react": "^16.2.0",

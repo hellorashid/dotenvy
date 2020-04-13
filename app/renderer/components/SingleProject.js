@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
 // import shell from 'shelljs'
 import { Box, Grommet, Heading, Button, Text, TextInput, Grid} from 'grommet';
 const {shell} = require('electron') // deconstructing assignment
 import {FolderOpen} from 'grommet-icons'
+import Peer from 'peerjs';
 
-
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 
 const { dialog } = require('electron').remote
 var fs = require('fs'); 
@@ -89,30 +89,53 @@ const SingleProject = ({project, updateProject}) => {
     <Button  label="" size="small" onClick={showFolder} icon={<FolderOpen />} />
     </Grid>
 
-    {/* <button onClick={()=>console.log(folder)}>TEST</button> */}
-
+    <Grid align="center"  columns={['2/3', '1/3']}>
+    <Box>
     <h2>Env Variables</h2>
     {
       project.variables.map( x => { 
-        return(<div key={x.key}>
+        return(<Box key={x.key} hoverIndicator>
             <p> {x.key}={x.value}</p>
-           </div>)
+           </Box>)
       })
     }
-
     <NewVariable createVariable={createVariable}/>
+    <SaveEnvFile saveEnvFile={saveEnvFile} />
 
-    <Box>
-      <SaveEnvFile saveEnvFile={saveEnvFile} />
     </Box>
 
+    <Box background="#2C4351" style={{height: '100%', marginLeft: 10}}>
+      <ShareProject  />
+    </Box>
+
+    </Grid>
   </Box>)
 
 }
 
+
+const ShareProject = (props) => { 
+  const projectUid = '12mjnc9280' 
+  const [importId, setImportId] = useState('') 
+  
+  return(<Box margin="small" >
+      <Heading level="5" margin="xsmall">Share</Heading>
+      <p>Project ID:<span style={{fontWeight: 'bold'}}>{projectUid}</span></p>
+      
+      <Heading level="5">Import</Heading>
+      <TextInput
+        placeholder="Import ID"
+        value={importId}
+        onChange={event => setImportId(event.target.value)}
+      />
+
+    </Box>
+  )
+}
+
 const SaveEnvFile = ({saveEnvFile}) => { 
   
-  return(<Box width="small" margin="small">
+  return(<Box margin="small" width="small">
       <Button 
         size="small"
         style={{color: 'white'}}
