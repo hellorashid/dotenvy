@@ -165,7 +165,7 @@ const SharingContainer = (props) => {
 }
 
 const ShareProject = (props) => { 
-  const projectUid = '12mjnc9280' 
+  const projectUid = props.project.token
   const [sharing, setSharing] = useState(false)
 
   return(<Box margin="small" >

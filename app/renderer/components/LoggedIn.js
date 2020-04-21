@@ -25,16 +25,6 @@ export default class LoggedIn extends Component {
     }
   }
 
-  componentDidMount = () => { 
-    // firebase.auth().onAuthStateChanged(user => { 
-    //   if (user) { 
-    //     console.log('Auth:', user)
-    //     this.setState({currentUid: user.uid})
-    //     this.setupUserSnapshot(user.uid, user.email)
-    //   }
-    // });
-  }
-
   setupUserSnapshot = async (uid, email) => { 
     const exists = await this.checkIfUserExists(uid)
 
@@ -101,15 +91,14 @@ export default class LoggedIn extends Component {
       <TitleBar title="dotEnvy - βeta" icon='../../dist-assets/icon.png' 
           currentWindow={currentWindow} // electron window instance
           platform={process.platform}
-         onClose={() => currentWindow.close()}
-         onMinimize={() => currentWindow.minimize()}
-         onMaximize={() => currentWindow.maximize()}
-         onDoubleClick={() => currentWindow.maximize()}
+          onClose={() => currentWindow.close()}
+          onMinimize={() => currentWindow.minimize()}
+          onMaximize={() => currentWindow.maximize()}
+          onDoubleClick={() => currentWindow.maximize()}
       />
         
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 10, marginBottom: 15}}> 
         <Logout onClick={this.handleLogout}/>
-        {/* <img src={'https://api.adorable.io/avatars/400/sssdsd.png'} style={{width: 40, height: 40, borderRadius: 25, marginLeft: 10}}/> */}
       </div>
 
       <AppView />
@@ -167,13 +156,15 @@ class AppView extends React.Component {
       name: this.state.newProjectName, 
       filePath: '', 
       variables: [], 
+
     }
     this.setState(state => {
       const projects = state.projects.concat(newProject)
       return {
         projects,
         newProjectName: '',
-        showNewModal: false
+        showNewModal: false, 
+        token: GenerateRandomToken()
       };
     });
     this.saveProjects(newProject)
@@ -199,9 +190,11 @@ class AppView extends React.Component {
       let id = GenerateProjectId(p.name)
       projects[id] = { 
         ...p, 
-        id: id
+        token: GenerateRandomToken()
+        // id: id
       }
     })
+    // store.set(`projects`, projects)
     // console.log(projects)
   }
 
@@ -210,7 +203,8 @@ class AppView extends React.Component {
   return ( 
     <div>
       <div style={{position: 'absolute', left: 0, color: '#efefef'}}>
-        {/* <button onClick={this._updateProjects}>DEBUG</button> */}
+        {/* <button onClick={this._debug_updateProjects}>DEBUG</button> */}
+        
         <Heading level='3' style={{marginLeft: 10}}>Projects <Add onClick={this.toggleNewModal} color='brand'/></Heading>
 
         { !loading && 
@@ -279,13 +273,6 @@ class AppView extends React.Component {
   )} 
 } 
 
-const GenerateProjectId = (string) => { 
-  let res = string.replace(/\W/g, '')
-  res = res.toLowerCase()
-  return res
-}
-
-
 const ProjectsList = ({projects, selectProject, currentProject}) => { 
   return(
     <Box>
@@ -312,5 +299,19 @@ const ProjectsList = ({projects, selectProject, currentProject}) => {
   )
 }
 
+const GenerateRandomToken = (length = 15) => {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
+const GenerateProjectId = (string) => { 
+  let res = string.replace(/\W/g, '')
+  res = res.toLowerCase()
+  return res
+}
 
