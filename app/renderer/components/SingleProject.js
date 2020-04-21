@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import TitleBar from 'frameless-titlebar';
 // import shell from 'shelljs'
-import { Box, CheckBox, Heading, Button, Text, TextInput, Grid} from 'grommet';
+import { Box, CheckBox, Heading, Button, Text, TextInput, Grid, Tabs, Tab} from 'grommet';
 const {shell} = require('electron') // deconstructing assignment
 import {FolderOpen} from 'grommet-icons'
 import Peer from 'peerjs';
@@ -169,20 +169,24 @@ const ShareProject = (props) => {
   const [sharing, setSharing] = useState(false)
 
   return(<Box margin="small" >
-      <Heading level="5" margin="xsmall">Share</Heading>
-      <p>Project ID:<span style={{fontWeight: 'bold'}}>{projectUid}</span></p>
-      <CheckBox
-        checked={sharing}
-        label="Start Sharing?"
-        onChange={(event) => setSharing(event.target.checked)}
-      />
+      <Tabs>
+        <Tab title="Share">
+          <p>ID:<span style={{fontWeight: 'bold'}}>{projectUid}</span></p>
+          <CheckBox
+            checked={sharing}
+            label="Start Sharing?"
+            onChange={(event) => setSharing(event.target.checked)}
+          />
 
-      { sharing && 
-        <SharingContainer projectUid={projectUid} variables={props.project.variables}/>
-      }
+          { sharing && 
+            <SharingContainer projectUid={projectUid} variables={props.project.variables}/>
+          }
+        </Tab>
+        <Tab title="Import">
+          <ImportProject addVariables={props.addVariables} />
+        </Tab>
+      </Tabs>
 
-      <Heading level="5">Import</Heading>
-      <ImportProject addVariables={props.addVariables} />
 
     </Box>
   )
@@ -192,10 +196,9 @@ const ImportPeer = ({importId, addVariables}) => {
   const [data, setData] = useState([])
   const [connection, setConnection] = useState('')
   const peer2 = new Peer('myyidd123'); 
-  console.log('connecting to', importId)
+  console.log('Connecting to', importId)
   peer2.on('open', function (id) {
     console.log('ID: ' + peer2.id);
-
     const conn2 = peer2.connect(importId, {reliable: true})
     conn2.on('open', function () {
       console.log("Connected to: " + conn2.peer);
@@ -238,7 +241,7 @@ const ImportProject = (props) => {
   const [importId, setImportId] = useState('') 
   const [connect, setConnect] = useState(false)
  
-  return(<Box  >
+  return(<Box  pad="small">
       <TextInput
         placeholder="Import ID"
         value={importId}
