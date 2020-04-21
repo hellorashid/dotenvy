@@ -4,7 +4,7 @@ import TitleBar from 'frameless-titlebar';
 // import shell from 'shelljs'
 import { Box, CheckBox, Heading, Button, Text, TextInput, Grid, Tabs, Tab} from 'grommet';
 const {shell} = require('electron') // deconstructing assignment
-import {FolderOpen} from 'grommet-icons'
+import {FolderOpen, Trash} from 'grommet-icons'
 import Peer from 'peerjs';
 
 // import dotenv from 'dotenv'
@@ -13,7 +13,7 @@ const { dialog } = require('electron').remote
 var fs = require('fs'); 
 
 
-const SingleProject = ({project, updateProject}) => { 
+const SingleProject = ({project, updateProject, deleteProject}) => { 
   const [folder, setFolder] = React.useState('')
 
   const openFolder = () => { 
@@ -77,7 +77,7 @@ const SingleProject = ({project, updateProject}) => {
 
   const testFunc = () => { 
     console.log('run')
-    console.log(shell.grep('dotenv', 'package.json'))
+    // console.log(shell.grep('dotenv', 'package.json'))
     // shell.exec(` dotenv dotenv_config_path=${folder}`, function(code, stdout, stderr) {
     //   console.log('Exit code:', code);
     //   console.log('Program output:', stdout);
@@ -89,7 +89,10 @@ const SingleProject = ({project, updateProject}) => {
 
   return(
   <Box style={{color: 'white', padding: 10, margin: 20}} animation="fadeIn" animation="fadeIn">
-    <Heading margin="small">{project.name}</Heading>
+    <Heading margin="small">{project.name}
+      <Trash color='plain' color="white" style={{marginLeft: 20}} onClick={()=>deleteProject(project)}/>
+    </Heading>
+
     <Grid align="center"
       columns={['3/4', '1/4']}
     >

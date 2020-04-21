@@ -135,8 +135,11 @@ class AppView extends React.Component {
     }
   }
 
-  updateProject = (proj) => {
-    // Update state & write to disk seperately? 
+  deleteProject = (proj) => { 
+    console.log(proj.id)
+    store.delete(`projects.${proj.id}`)
+    this.setState({loading: true, currentProject: undefined})
+    setTimeout(() => { this.getProjects(); }, 1000);
   }
 
   saveProjects = (proj) => { 
@@ -265,6 +268,7 @@ class AppView extends React.Component {
             key={this.state.projects[this.state.currentProject].id}
             project={this.state.projects[this.state.currentProject]}
             updateProject={this.saveProjects}
+            deleteProject={this.deleteProject}
           />
         } 
        
