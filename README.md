@@ -3,8 +3,22 @@
 
 dotEnvy is an environment variable &  .env file manager.  It also lets you sync your variables across computers. Data is only transferred peer-to-peer, and nothing is sent to servers or databases, because well, there arn't any. 
 
-# Free! 
 dotEnvy is free and open source! Do with it what you please.
+
+# Install 
+
+1. Install from the Releases Page
+
+2. Build Locally: 
+
+- ```npm i```
+
+- Based on your machine:
+```
+npm run pack:win
+npm run pack:mac
+npm run pack:linux
+```
 
 
 ## Why dotEnvy?
