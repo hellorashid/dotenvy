@@ -38,7 +38,7 @@ When you chose to share variables, a p2p connection is established and data is t
 I think so. I'm no security expert. Probably still safer than texting your API keys though.  
 
 ## Why dotEnvy?
-I wanted to share API keys with teammates on a project we were collaborating on, and didn't really find a good easy solution on the internet. I wanted a secure way to automatically sync out .env files, without creating an account somewhere or storing something on third party servers.
+I wanted to share API keys with teammates on a project we were collaborating on, and didn't really find a good easy solution on the internet. I wanted a secure way to automatically sync our .env files, without creating an account somewhere or storing something on third party servers.
 
 ## Why Electron??
 I created this primarily as an experiment - create a complete Electron app is probably overkill. That being said, I'm working on creating a lightweight CLI version. 
