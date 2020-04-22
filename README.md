@@ -20,6 +20,22 @@ npm run pack:mac
 npm run pack:linux
 ```
 
+# Instructions
+
+1. After installing, create a project and choose a directory. 
+2. Add the variables you want, and click create. This will create a local .env file
+3. If you are sharing your enviroment with a teammate, you will need to send them your Share ID. 
+4. Click 'Start Sharing' - This will start your p2p server.
+4. If you are importing variables, click 'Import' and enter the ID of your peer. This will automatically import the variables and add them to your local project.
+
+## Where is data stored?
+Everything is stored locally, on your device. 
+
+## How do is data transferred? 
+When you chose to share variables, a p2p connection is established and data is transfered and then stored on the local machine. There are no databses or servers.  
+
+## Is this secure?
+I think so. I'm no security expert. Probably still safer than texting your API keys though.  
 
 ## Why dotEnvy?
 I wanted to share API keys with teammates on a project we were collaborating on, and didn't really find a good easy solution on the internet. I wanted a secure way to automatically sync out .env files, without creating an account somewhere or storing something on third party servers.
