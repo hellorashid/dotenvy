@@ -159,7 +159,7 @@ class AppView extends React.Component {
       name: this.state.newProjectName, 
       filePath: '', 
       variables: [], 
-
+      token: GenerateRandomToken()
     }
     this.setState(state => {
       const projects = state.projects.concat(newProject)
@@ -167,7 +167,6 @@ class AppView extends React.Component {
         projects,
         newProjectName: '',
         showNewModal: false, 
-        token: GenerateRandomToken()
       };
     });
     this.saveProjects(newProject)
