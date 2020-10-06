@@ -47,7 +47,7 @@
     "babel-eslint": "^10.0.1",
     "browser-sync": "^2.23.6",
     "chai": "^4.1.0",
-    "electron": "^8.2.0",
+    "electron": "^8.5.1",
     "electron-builder": "^22.5.1",
     "electron-devtools-installer": "^2.2.4",
     "electron-mocha": "^8.2.1",
